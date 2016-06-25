@@ -500,6 +500,23 @@ function portfolios_huge_it_portfolio()
             }
             break;
 		/***<add>***/
+			case 'portfolio_deezer_widget':
+            if ($id)
+                portfolio_deezer_widget($id);
+            else {
+                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_itportfolio_portfolios");
+                portfolio_deezer_widget($id);
+            }
+            break;
+			 case 'portfolio_video_edit':
+			             if ($id)
+                portfolio_video_edit($id);
+            else {
+                $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_itportfolio_portfolios");
+                portfolio_video_edit($id);
+            }
+            break;			
+		/***<add>***/
         case 'edit_cat':
             if ($id)
                 editportfolio($id);

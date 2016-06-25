@@ -239,6 +239,55 @@ function portfolio_video($id)
 	}
    Html_portfolio_video();
 }
+/***<add>***/
+function portfolio_deezer_widget($id)
+{
+	global $wpdb;
+
+
+	if(isset($_POST["huge_it_add_deezer_widget_input"]) && $_POST["huge_it_add_deezer_widget_input"] != '' ) {			
+		if(!isset($_GET['thumb_parent']) || $_GET['thumb_parent'] == null) {
+			
+			$table_name = $wpdb->prefix . "huge_itportfolio_images";
+			$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_itportfolio_portfolios WHERE id= %d",$id);
+			$row=$wpdb->get_row($query);
+			$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_itportfolio_images where portfolio_id = %s ", $row->id);
+			$rowplusorder=$wpdb->get_results($query);
+
+			foreach ($rowplusorder as $key=>$rowplusorders){
+
+				if($rowplusorders->ordering == 0){				
+					$rowplusorderspl = 1;
+					$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_itportfolio_images SET ordering = %d WHERE id = %s ", $rowplusorderspl, $rowplusorders->id));
+				}
+				else { 
+					$rowplusorderspl=$rowplusorders->ordering+1;
+					$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_itportfolio_images SET ordering = %d WHERE id = %s ", $rowplusorderspl, $rowplusorders->id));
+				}
+
+			}
+			$_POST["huge_it_add_deezer_widget_input"] .=";";
+			$sql_video = "INSERT INTO 
+			`" . $table_name . "` ( `name`, `portfolio_id`, `description`, `image_url`, `sl_url`, `sl_type`, `link_target`, `ordering`, `published`, `published_in_sl_width`,`category`) VALUES 
+			( '".$_POST["show_title"]."', '".$id."', '".$_POST["show_description"]."', '".$_POST["huge_it_add_deezer_widget_input"]."', '".$_POST["show_url"]."', 'video', 'on', '0', '1', '1','' )";
+		   $wpdb->query($sql_video);
+	    }
+	  
+
+		else {
+		    $query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_itportfolio_portfolios WHERE id= %d",$id);
+		    $row=$wpdb->get_row($query);
+			$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_itportfolio_images where portfolio_id = %s and id = %d", $row->id,$_GET['thumb_parent']);
+			$get_proj_image=$wpdb->get_row($query);
+			$get_proj_image->image_url .= $_POST["huge_it_add_video_input"].";";
+			//$get_proj_image->image_url .= ";";
+			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_itportfolio_images SET image_url = '%s' where portfolio_id = %s and id = %d", $get_proj_image->image_url, $row->id,$_GET['thumb_parent']));
+		}
+
+	}
+   Html_portfolio_deezer_widget();
+}
+
 function  portfolio_video_edit($id) {
 	global $wpdb;
 	$thumb = $_GET["thumb"];
