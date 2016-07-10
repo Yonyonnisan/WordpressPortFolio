@@ -508,12 +508,12 @@ function portfolios_huge_it_portfolio()
                 portfolio_deezer_widget($id);
             }
             break;
-			 case 'portfolio_video_edit':
+			 case 'portfolio_deezer_widget_edit':
 			             if ($id)
-                portfolio_video_edit($id);
+                portfolio_deezer_widget_edit($id);
             else {
                 $id = $wpdb->get_var("SELECT MAX( id ) FROM " . $wpdb->prefix . "huge_itportfolio_portfolios");
-                portfolio_video_edit($id);
+                portfolio_deezer_widget_edit($id);
             }
             break;			
 		/***<add>***/

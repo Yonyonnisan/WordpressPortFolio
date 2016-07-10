@@ -1731,31 +1731,16 @@ function Html_portfolio_deezer_widget(){
 		#wpfooter {display:none;}
 		iframe {height:250px !important;}
 		#TB_window {height:250px !important;}
+		
+		
 	</style>
 	<script type="text/javascript">
-		function youtube_parser(url){
-			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-			var match = url.match(regExp); 
-			var match_vimeo = /vimeo.*\/(\d+)/i.exec( url );
-			if (match&&match[7].length==11){
-				return match[7];
-			}else if(match_vimeo) {
-				    return match_vimeo[1];
-			}
-			else {
-				return false;
-			}
-		}
 
 		jQuery(document).ready(function() {			
 		
 		jQuery('.huge-it-insert-deezer_wifget-button').click(function(){
 				var ID1 = jQuery('#huge_it_add_deezer_widget_input').val();
-				if(ID1==""){alert("Please copy and past url form Deezer to insert the widget.");return false;}
-				if (youtube_parser(ID1) == false) {
-					alert("Url is incorrect");
-					return false;
-				}			
+				if(ID1==""){alert("Please copy and past url form Deezer to insert the widget.");return false;}		
 				jQuery('.huge-it-insert-post-button').on('click', function() {
 				var ID1 = jQuery('#huge_it_add_deezer_widget_input').val();
 				if(ID1==""){alert("Please copy and past url form Deezer to inser the widget");return false;}
@@ -1797,26 +1782,33 @@ function Html_portfolio_deezer_widget(){
 			<div class="control-panel">
 			<?php if (!isset($_GET['thumb_parent'])) { ?>
 				<form method="post" action="admin.php?page=portfolios_huge_it_portfolio&task=portfolio_deezer_widget&id=<?php echo $_GET['id']; ?>&closepop=1" >
-					<input type="text" id="huge_it_add_deezer_widget_input" name="huge_it_add_deezer_widget_input" />
-					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-deezer_widget-button'><?php echo __( 'Insert Video Slide', 'portfolio-gallery' );?></button>
+					<label for="huge_it_add_deezer_widget_input">Descripting picture link:</label>
+					<input type="text" id="huge_it_add_deezer_widget_input" name="huge_it_add_deezer_widget_input" style="width:300px; position:absolute;right:200px;"/>
+					</br>
+					</br>
 					<div id="add-deezer_widget-popup-options">
 						<div>
 							<div>
 								<label for="show_title"><?php echo __( 'Title', 'portfolio-gallery' );?>:</label>	
-								<div>
-									<input name="show_title" value="" type="text" />
-								</div>
+								<input name="show_title" value="" type="text" style="width:300px; position:absolute; right:200px;"/>
 							</div>
+							</br>
+							</br>
 							<div>
 								<label for="show_description"><?php echo __( 'Description', 'portfolio-gallery' );?>:</label>
-								<textarea id="show_description" name="show_description"></textarea>
+								<textarea id="show_description" name="show_description" style="width:300px; position:absolute; right:200px;"></textarea>
 							</div>
+							</br>
+							</br>
 							<div>
-								<label for="show_url"><?php echo __( 'Url', 'portfolio-gallery' );?>:</label>
-								<input type="text" name="show_url" value="" />	
+								<label for="show_url"><?php echo __( 'Url of the deezer widget', 'portfolio-gallery' );?>:</label>
+								<input type="text" name="show_url" value="" style="width:300px; position:absolute; right:200px;"/>	
 							</div>
+							</br>
+							</br>
 						</div>
 					</div>
+					<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-deezer_widget-button' style="margin: 0 auto;"><?php echo __( 'Insert Music Slide', 'portfolio-gallery' );?></button>					
 				</form>
 			<?php } else { $thumb_parent = $_GET["thumb_parent"] //get project image's id and sent to form by get ,who addes thumb_video by $_get thumb_parent ?>
 				<form method="post" action="admin.php?page=portfolios_huge_it_portfolio&task=portfolio_deezer_widget&id=<?php echo $_GET['id']; ?>&thumb_parent=<?php echo $thumb_parent ; ?>&closepop=1" >
@@ -2000,6 +1992,166 @@ function Html_portfolio_video_edit($thumb,$id_portfolio,$id,$param,$video,$edit)
 	</div>
 	<a class='button-primary set-new-video'><?php echo __( 'See New Video', 'portfolio-gallery' );?></a>
 	<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-video-button'><?php echo __( 'Insert Video Slide', 'portfolio-gallery' );?></button>
+</form>
+<?php 
+}
+?>
+
+<?php 
+function Html_portfolio_deezer_widget_edit($thumb,$id_portfolio,$id,$param,$dezer_widget,$edit) {		
+	global $wpdb;$deezer_widget_id = get_deezer_widget_id_from_url($param);
+
+?>
+	<style>
+		html.wp-toolbar {
+			padding:0px !important;
+		}
+		#wpadminbar,#adminmenuback,#screen-meta, .update-nag,#dolly {
+			display:none;
+		}
+		#wpbody-content {
+			padding-bottom:30px;
+		}
+		#adminmenuwrap {display:none !important;}
+		.auto-fold #wpcontent, .auto-fold #wpfooter {
+			margin-left: 0px;
+		}
+		#wpfooter {display:none;}
+		iframe {height:150px !important;}
+		#TB_window {height:150px !important;}
+		.html5-video-player:not(.ad-interrupting):not(.hide-info-bar) .html5-info-bar {
+			display: none !important;
+		}
+		.iframe-text-area {
+			float: left;
+		}
+		.iframe-area {
+			float: left;
+			height: 100%;
+			width: 40%;
+			margin: 5px;
+		}
+		.text-area {
+			float: left;
+			width: 50%;
+			margin: 5px;
+		}
+	</style>
+		<script type="text/javascript">
+		function youtube_parser(url){
+			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+			var match = url.match(regExp); 
+			var match_vimeo = /vimeo.*\/(\d+)/i.exec( url );
+			if (match&&match[7].length==11){
+				return match[7];
+			}else if(match_vimeo) {
+				    return match_vimeo[1];
+			}
+			else {
+				return false;
+			}
+		}
+
+		jQuery(document).ready(function() {			
+		
+		jQuery('.huge-it-insert-deezer_widget-button').click(function(){
+				var ID1 = jQuery('#huge_it_add_deezer_widget_input').val();
+				if(ID1==""){alert("Please copy and past url form Deezer to insert into slider.");return false;}
+				if (youtube_parser(ID1) == false) {
+					alert("Url is incorrect");
+					return false;
+				}
+				jQuery('.huge-it-insert-post-button').on('click', function() {
+				//var ID1 = jQuery('#huge_it_add_video_input').val();
+				
+				window.parent.uploadID.val(ID1);
+				
+				tb_remove();
+				//jQuery("#save-buttom").click();
+			});
+
+				});
+					<?php	
+			if(isset($_GET["closepop"])){
+			if($_GET["closepop"] == 1){ ?>
+					jQuery("#closepopup").click();
+					self.parent.location.reload();
+			<?php	}	} ?>
+			jQuery('.updated').css({"display":"none"});
+		});
+/***add***/
+	jQuery(function($) {
+		
+		jQuery(".set-new-deezer_widget").on('click',function() {
+			var showcontrols,prefix;
+			var new_video = jQuery("#huge_it_add_deezer_widget_input").val();
+			//alert(new_deezer_widget);return;
+			var new_deezer_widget_id= youtube_parser(new_deezer_widget);
+			if(!new_deezer_widget_id) 
+				return;
+			if(new_deezer_widget_id.length == 11) {
+				 showcontrols = "?modestbranding=1&showinfo=0&controls=0";
+				 prefix = "//www.youtube.com/embed/";
+			}
+			else {
+			 showcontrols = "?title=0&amp;byline=0&amp;portrait=0";
+			 prefix = "//player.vimeo.com/video/";
+
+			}
+			var old_url =jQuery(".text-area");
+
+			jQuery(".iframe-area").fadeOut(300);
+			old_url.html("");
+			jQuery(".text-area").html(new_video);
+			jQuery(".iframe-area").attr("src",prefix+new_video_id+showcontrols);
+			jQuery("#huge_it_edit_deezer_widget_input").val(prefix+new_video_id+showcontrols);
+			jQuery(".iframe-area").fadeIn(1000);
+		})
+		/*jQuery("#huge_it_add_video_input").change(function() {
+			var showcontrols,prefix;
+			var new_video = jQuery("#huge_it_add_video_input").val();
+			var new_video_id= youtube_parser(new_video);
+			if(!new_video_id) 
+				return;
+			if(new_video_id.length == 11) {
+				 showcontrols = "?modestbranding=1&showinfo=0&controls=0";
+				 prefix = "//www.youtube.com/embed/";
+			}
+			else {
+			 showcontrols = "?title=0&amp;byline=0&amp;portrait=0";
+			 prefix = "//player.vimeo.com/video/";
+
+			}
+			var old_url =jQuery(".text-area");
+			
+
+	
+			jQuery(".iframe-area").fadeOut(300);
+			old_url.html("");
+			jQuery(".text-area").html(new_video);
+			jQuery(".iframe-area").attr("src",prefix+new_video_id+showcontrols);
+			jQuery("#huge_it_edit_video_input").val(prefix+new_video_id+showcontrols);
+			jQuery(".iframe-area").fadeIn(1000);
+		})*/
+	});
+	</script>
+<h1><?php echo __( 'Update Deezer Widget', 'portfolio-gallery' );?></h1>
+<form method="post" action="admin.php?page=portfolios_huge_it_portfolio&task=portfolio_deezer_widget_edit&portfolio_id=<?php echo $id_portfolio;?>&id=<?php echo $id; ?>&thumb=<?php echo $thumb;?>&TB_iframe=1&closepop=1" >
+<div class="iframe-text-area">
+<?php if($edit == '') { ?>
+<iframe class="iframe-area" src="<?php if($deezer_widget == 'youtube') { ?>//www.youtube.com/embed/<?php echo $deezer_widget_id[0]; ?>?modestbranding=1&showinfo=0&controls=0
+ <?php } ?>" frameborder="0" allowfullscreen></iframe>
+<?php } else  { ?>
+<iframe class="iframe-area" src=<?php echo $edit;?>  frameborder="0" allowfullscreen></iframe>
+<?php } ?>
+	<textarea rows="4" cols="50" class="text-area" disabled >
+<?php echo $param;?>
+	</textarea>
+	<input type="text" id="huge_it_add_deezer_widget_input" name="huge_it_add_deezer_widget_input" value="" placeholder = "New deezer widget url" /><br />
+	<input type="hidden" id="huge_it_edit_deezer_widget_input" name="huge_it_edit_deezer_widget_input" value="" placeholder = "New deezer widget url" /><br />
+	</div>
+	<a class='button-primary set-new-video'><?php echo __( 'Listen to the new Deezer widget', 'portfolio-gallery' );?></a>
+	<button class='save-slider-options button-primary huge-it-insert-video-button' id='huge-it-insert-deezer_widget-button'><?php echo __( 'Insert Deezer Widget Slide', 'portfolio-gallery' );?></button>
 </form>
 <?php 
 }

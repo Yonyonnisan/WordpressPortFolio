@@ -269,7 +269,7 @@ function portfolio_deezer_widget($id)
 			$_POST["huge_it_add_deezer_widget_input"] .=";";
 			$sql_video = "INSERT INTO 
 			`" . $table_name . "` ( `name`, `portfolio_id`, `description`, `image_url`, `sl_url`, `sl_type`, `link_target`, `ordering`, `published`, `published_in_sl_width`,`category`) VALUES 
-			( '".$_POST["show_title"]."', '".$id."', '".$_POST["show_description"]."', '".$_POST["huge_it_add_deezer_widget_input"]."', '".$_POST["show_url"]."', 'video', 'on', '0', '1', '1','' )";
+			( '".$_POST["show_title"]."', '".$id."', '".$_POST["show_description"]."', '".$_POST["huge_it_add_deezer_widget_input"]."', '".$_POST["show_url"]."', 'deezer_widget', 'on', '0', '1', '1','' )";
 		   $wpdb->query($sql_video);
 	    }
 	  
@@ -313,6 +313,30 @@ function  portfolio_video_edit($id) {
 
 }
 
+function  portfolio_deezer_widget_edit($id) {
+	global $wpdb;
+	$thumb = $_GET["thumb"];
+	$portfolio_id = $_GET["portfolio_id"];
+	$id = $_GET["id"];
+	$query=$wpdb->prepare("SELECT * FROM ".$wpdb->prefix."huge_itportfolio_images where portfolio_id = %s and id = %d", $portfolio_id,$id);
+			$get_proj_image=$wpdb->get_row($query);
+		$input_edit_deezer_widget = explode(";", $get_proj_image->image_url);//var_dump($input_edit_video );exit;
+		$input_edit_deezer_widget_thumb = $input_edit_deezer_widget[$thumb];
+		$deezer_widget = youtube_or_vimeo($input_edit_deezer_widget_thumb);  // Changing
+
+	if( isset($_POST["huge_it_add_deezer_widget_input"]) && $_POST["huge_it_add_deezer_widget_input"] != '') {
+		$input_edit_deezer_widget[$thumb] = $_POST["huge_it_add_deezer_widget_input"];
+		$new_url = implode(";", $input_edit_deezer_widget);
+		$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."huge_itportfolio_images SET image_url = '".$new_url."' where portfolio_id = %s and id = %d",$portfolio_id,$id));
+	}
+
+	if(isset($_POST["huge_it_edit_deezer_widget_input"]) && $_POST["huge_it_edit_deezer_widget_input"] != '')
+		$edit = $_POST["huge_it_edit_deezer_widget_input"];
+	else  $edit = '';
+		
+	Html_portfolio_deezer_widget_edit($thumb,$portfolio_id,$id,$input_edit_deezer_widget_thumb,$deezer_widget,$edit);
+
+}
 /***</add>***/
 
 function removeportfolio($id)

@@ -31,6 +31,9 @@ if (!function_exists('youtube_or_vimeo_portfolio'))	{
 			if(strlen($end) == 8 || strlen($end) == 9)
 				return 'vimeo';
 		}
+		elseif(strpos($url,'deezer') !== false) {
+			return 'deezer_widget';
+		}
 		return 'image';
 	}
 
@@ -1559,6 +1562,7 @@ $paramssld["ht_view6_cat_all"] = "All";
                               <div class="default-block_<?php echo $portfolioID; ?> <?php echo $lighboxable; ?>">
                                       <div class="image-block_<?php echo $portfolioID; ?>  add-H-relative">
                                               <?php $imgurl=explode(";",$row->image_url); ?>
+											  <?php $slurl=explode(";",$row->sl_url); ?>
                                               <?php 	
 											    if($row->image_url != ';'){
 													switch(youtube_or_vimeo_portfolio($imgurl[0])) { 
@@ -1567,6 +1571,14 @@ $paramssld["ht_view6_cat_all"] = "All";
 															<img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>" src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>" />
 														</a>
 														<?php 
+														break;
+														case 'deezer_widget':
+														$videourl=get_video_id_from_url_portfolio($imgurl[0]);?>
+														<a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php if( $lighboxable == "lighboxable")  echo $group_key;?> "  title = "<?php echo $row->name;?>">
+														<img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>"  src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"  />
+														<div class="play-icon <?php echo $videourl[1];?>-icon"></div>
+														</a>
+														<?php
 														break;
 														case 'youtube':
 														$videourl=get_video_id_from_url_portfolio($imgurl[0]);?>
@@ -1603,6 +1615,7 @@ $paramssld["ht_view6_cat_all"] = "All";
 
                               <div class="wd-portfolio-panel_<?php echo $portfolioID; ?>" id="panel<?php echo $key; ?>">
                               <?php  $imgurl=explode(";",$row->image_url);
+							  $slurl=explode(";",$row->sl_url);
 									 // array_shift($imgurl);
 									if($paramssld['ht_view0_show_thumbs']=='on' and $paramssld['ht_view0_thumbs_position']=="before" && count($imgurl) != 2)
                                       {?>
@@ -1621,6 +1634,13 @@ $paramssld["ht_view6_cat_all"] = "All";
                                                                       <a href="<?php echo $img; ?>" class=" portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>"><img src="<?php echo get_huge_image($img,$image_prefix); ?>"></a>
 															<?php 
 																break;
+																case 'deezer_widget':
+																	$videourl=get_video_id_from_url_portfolio($img);?>
+                                                                    <a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>" style="position:relative">
+																	<img src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"><div class="play-icon youtube-icon"></div></a>
+																	
+															  <?php 
+															    break;																
 																case 'youtube':
 																	$videourl=get_video_id_from_url_portfolio($img);?>
                                                                     <a href="https://www.youtube.com/embed/<?php echo $videourl[0];?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>" style="position:relative">
@@ -1651,6 +1671,7 @@ $paramssld["ht_view6_cat_all"] = "All";
                                               </div>
                                       <?php }
 									   $imgurl=explode(";",$row->image_url);
+									   $slurl=explode(";",$row->sl_url);
 									 //  array_shift($imgurl);
                                       if($paramssld['ht_view0_show_thumbs']=='on' and $paramssld['ht_view0_thumbs_position']=="after" && count($imgurl) != 2){?>
                                               <div>
@@ -1666,6 +1687,12 @@ $paramssld["ht_view6_cat_all"] = "All";
 															  switch(youtube_or_vimeo_portfolio($img)) { 
 																case 'image':?>
                                                                       <a href="<?php echo $img; ?>" class=" portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>"><img src="<?php echo get_huge_image($img,$image_prefix); ?>"></a>
+															<?php 
+																break;
+																case 'deezer_widget':
+																	$videourl=get_video_id_from_url_portfolio($img);?>
+                                                                    <a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>" style="position:relative">
+																	<img src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"><div class="play-icon youtube-icon"></div></a>															
 															<?php 
 																break;
 																case 'youtube':
@@ -2404,13 +2431,22 @@ var defaultBlockWidth=<?php echo $paramssld['ht_view0_block_width']; ?>;
                               <div class="default-block_<?php echo $portfolioID; ?>">
                                       <div class="image-block_<?php echo $portfolioID; ?> add-H-relative" >
                                               <?php $imgurl=explode(";",$row->image_url); ?>
+											  <?php $slurl=explode(";",$row->sl_url); ?>
                                               <?php
 											    if($row->image_url != ';'){
 													switch(youtube_or_vimeo_portfolio($imgurl[0])) { 
 														case 'image':		?>	
                                                         <a href="<?php echo$imgurl[0]; ?>" class=" portfolio-group<?php echo $group_key;?> " title="<?php echo $row->name;?>">														
 															<img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>" src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>" />
-														</a>	
+														</a>
+														<?php 
+														break;
+														case 'deezer_widget':
+														$videourl=get_video_id_from_url_portfolio($imgurl[0]);?>
+                                                        <a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?>" title="<?php echo $row->name;?>">
+															<img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>"  src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"  />
+															<div class="play-icon <?php echo $videourl[1];?>-icon"></div>
+														</a>															
 														<?php 
 														break;
 														case 'youtube':
@@ -2463,6 +2499,13 @@ var defaultBlockWidth=<?php echo $paramssld['ht_view0_block_width']; ?>;
                                                                       <a href="<?php echo $img; ?>" class=" portfolio-group<?php echo $group_key;?> "  title = "<?php echo $row->name; ?>"><img src="<?php echo get_huge_image($img,$image_prefix); ?>"></a>
 															<?php 
 																break;
+																case 'deezer_widget':
+																	$videourl=get_video_id_from_url_portfolio($img);?>
+                                                                    <a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title="<?php echo $row->name; ?>" style="position:relative">
+																	<img src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"><div class="play-icon youtube-icon"></div></a>
+																															
+															<?php 
+																break;
 																case 'youtube':
 																	$videourl=get_video_id_from_url_portfolio($img);?>
                                                                     <a href="https://www.youtube.com/embed/<?php echo $videourl[0];?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title="<?php echo $row->name; ?>" style="position:relative">
@@ -2493,7 +2536,9 @@ var defaultBlockWidth=<?php echo $paramssld['ht_view0_block_width']; ?>;
                                               </div>
                                       <?php }
                                       $imgurl=explode(";",$row->image_url);
+									  $slurl=explode(";",$row->sl_url);
 									  array_shift($imgurl);
+									  array_shift($slurl);
                                       if($paramssld['ht_view1_show_thumbs']=='on' and $paramssld['ht_view1_thumbs_position']=="after" && count($imgurl) != 2){?>
                                               <div>
                                                       <ul class="thumbs-list_<?php echo $portfolioID; ?>">
@@ -2507,6 +2552,13 @@ var defaultBlockWidth=<?php echo $paramssld['ht_view0_block_width']; ?>;
 															  switch(youtube_or_vimeo_portfolio($img)) { 
 																case 'image':?>
                                                                       <a href="<?php echo $img; ?>" class=" portfolio-group<?php echo $group_key;?> "  title = "<?php  echo $row->name; ?>;"><img src="<?php echo get_huge_image($img,$image_prefix); ?>"></a>
+															<?php 
+																break;
+																case 'deezer_widget':
+																	$videourl=get_video_id_from_url_portfolio($img);?>
+                                                                    <a href="<?php echo $slurl[0]; ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> "  title="<?php echo $row->name; ?>" style="position:relative">
+																	<img src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"><div class="play-icon youtube-icon"></div></a>
+																																
 															<?php 
 																break;
 																case 'youtube':
@@ -3885,7 +3937,13 @@ jQuery(function(){
 							?>
 							<img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>" src="<?php echo $imgurl[0]; ?>" />
 							<?php 
-							break;
+							break;							
+							case 'deezer_widget':
+							$slurl=explode(";",$row->sl_url);
+							$videourl=get_video_id_from_url_portfolio($imgurl[0]);//var_dump($videourl[0]);?>
+							<iframe src="<?php echo $slurl[0]; ?>" frameborder="0" allowfullscreen></iframe>							
+							<?php 
+							break;							
 							case 'youtube':
 							$videourl=get_video_id_from_url_portfolio($imgurl[0]);//var_dump($videourl[0]);?>
 							<iframe src="//www.youtube.com/embed/<?php echo $videourl[0]; ?>?modestbranding=1&showinfo=0" frameborder="0" allowfullscreen></iframe>
@@ -3916,7 +3974,14 @@ jQuery(function(){
 										case 'image':?>
 									
 										<a href="<?php echo $row->sl_url; ?>" class="img-thumb" title="<?php echo $row->name; ?>"><img src="<?php echo $img; ?>"></a>
-									
+									<?php
+										break;
+										$slurl=explode(";",$row->sl_url);
+										case 'deezer_widget':
+										$videourl=get_video_id_from_url_portfolio($img);?>
+										<a href="<?php echo esc_html(stripslashes($rowimages->sl_url)); ?>" class="video-thumb"  title="<?php echo $row->name; ?>" style="position:relative">
+										<img src="<?php echo $slurl[0]; ?>"><div class="play-icon youtube-icon" title="<?php echo $videourl[0]; ?>"></div>
+										</a>									
 									<?php
 										break;
 										case 'youtube':
@@ -3957,7 +4022,14 @@ jQuery(function(){
 										case 'image':?>
 									
 										<a href="<?php echo $row->sl_url; ?>" class="img-thumb" title="<?php echo $row->name; ?>"><img src="<?php echo $img; ?>"></a>
-									
+									<?php
+										break;
+										case 'deezer_widget':
+										$slurl=explode(";",$row->sl_url);
+										$videourl=get_video_id_from_url_portfolio($img);?>
+										<a href="<?php echo esc_html(stripslashes($rowimages->sl_url)); ?>" class=" video-thumb"  title="<?php echo $row->name; ?>" style="position:relative">
+										<img src="<?php echo $slurl[0]; ?>"><div class="play-icon youtube-icon" title="<?php echo $videourl[0]; ?>"></div>
+										</a>									
 									<?php
 										break;
 										case 'youtube':
@@ -4426,6 +4498,14 @@ jQuery(function(){
 														<a href="<?php echo $imgurl[0]; ?>" class=" portfolio-group<?php echo $group_key; ?>" title="<?php echo $row->name; ?>" ><img alt="<?php echo $row->name; ?>" id="wd-cl-img<?php echo $key; ?>" src="<?php echo get_huge_image($imgurl[0],$image_prefix); ?>"></a>
 												<?php 
 													break;
+													case 'deezer_widget':
+													$slurl=explode(";",$row->sl_url);
+													$videourl=get_video_id_from_url_portfolio($imgurl[0]);?>
+														<a href="<?php echo esc_html(stripslashes($rowimages->sl_url)); ?>" class="video-thumb"  title="<?php echo $row->name; ?>" style="position:relative" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> add-H-block"  title="<?php echo $row->name; ?>"  >
+														<img src="<?php echo $slurl[0]; ?>""><div class="play-icon <?php echo $videourl[1];?>-icon"></div></a>
+																								
+												<?php 
+													break;
 													case 'youtube':
 													$videourl=get_video_id_from_url_portfolio($imgurl[0]);?>
 														<a href="https://www.youtube.com/embed/<?php echo $videourl[0];?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?> add-H-block"  title="<?php echo $row->name; ?>"  >
@@ -4465,7 +4545,14 @@ jQuery(function(){
 															  case 'image':
                                                               ?>
                                                                       <li><a href="<?php echo $img;?>" class=" portfolio-group<?php echo $group_key; ?> "  title = "<?php echo $row->name; ?>"><img src="<?php echo get_huge_image($img,$image_prefix); ?>"></a></li>
-                                                      <?php   break;
+													  <?php   break;
+															  case 'deezer_widget':
+																	 $slurl=explode(";",$row->sl_url);
+																	 $videourl=get_video_id_from_url_portfolio($img);?>
+																	  <li><a href="<?php echo esc_html(stripslashes($rowimages->sl_url)); ?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?>  add-H-relative"  title="<?php echo $row->name; ?>" >
+																	  <img src="<?php echo $slurl[0]; ?>"><div class="play-icon <?php echo $videourl[1];?>-icon"></div></a>
+																	  </li>                                                      
+													  <?php   break;
 															  case 'youtube':
 																	 $videourl=get_video_id_from_url_portfolio($img);?>
 																	  <li><a href="https://www.youtube.com/embed/<?php echo $videourl[0];?>" class="huge_it_portfolio_item pyoutube portfolio-group<?php echo $group_key;?>  add-H-relative"  title="<?php echo $row->name; ?>" >
