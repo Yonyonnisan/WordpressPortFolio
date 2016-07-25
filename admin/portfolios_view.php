@@ -1782,10 +1782,68 @@ function Html_portfolio_deezer_widget(){
 			<div class="control-panel">
 			<?php if (!isset($_GET['thumb_parent'])) { ?>
 				<form method="post" action="admin.php?page=portfolios_huge_it_portfolio&task=portfolio_deezer_widget&id=<?php echo $_GET['id']; ?>&closepop=1" >
+<script>
+jQuery(document).ready(function($){
+
+
+	 
+
+  jQuery('.huge-it-newuploader .button').click(function(e) {
+    var send_attachment_bkp = wp.media.editor.send.attachment;
+	
+    var button = jQuery(this);
+    var id = button.attr('id').replace('_button', '');
+    _custom_media = true;
+
+	jQuery("#"+id).val('');
+	wp.media.editor.send.attachment = function(props, attachment){
+      if ( _custom_media ) {
+	     jQuery("#"+id).val(attachment.url+';;;'+jQuery("#"+id).val());
+		 jQuery("#save-buttom").click();
+      } else {
+        return _orig_send_attachment.apply( this, [props, attachment] );
+      };
+    }
+  
+    wp.media.editor.open(button);
+	 
+    return false;
+  });
+  
+  	/*#####HIDE NEW UPLOADER'S LEFT MENU######*/  
+										jQuery(".wp-media-buttons-icon").click(function() {
+											jQuery(".media-menu .media-menu-item").css("display","none");
+											jQuery(".media-menu-item:first").css("display","block");
+											jQuery(".separator").next().css("display","none");
+											jQuery('.attachment-filters').val('image').trigger('change');
+											jQuery(".attachment-filters").css("display","none");
+										});
+	jQuery('.widget-images-list .add-image-box').hover(function() {
+		jQuery(this).find('.add-thumb-project').css('display','none');
+		jQuery(this).find('.add-image-video').css('display','block');
+	},function() {
+		jQuery(this).find('.add-image-video').css('display','none');
+		jQuery(this).find('.add-thumb-project').css('display','block');
+	});
+	jQuery('#portfolio_effects_list').on('change',function(){
+		var sel = jQuery(this).val();
+		if(sel == 5) {
+			jQuery('.for-content-slider').css('display','block')
+		}
+		else {
+			jQuery('.for-content-slider').css('display','none')
+		}
+		});
+		jQuery('#portfolio_effects_list').change();
+});
+</script>
 					<label for="huge_it_add_deezer_widget_input">Descripting picture link:</label>
 					<input type="text" id="huge_it_add_deezer_widget_input" name="huge_it_add_deezer_widget_input" style="width:300px; position:absolute;right:200px;"/>
 					</br>
 					</br>
+					<div class="huge-it-newuploader uploader button button-primary add-new-image">
+						<input type="button" class="button wp-media-buttons-icon" name="_unique_name_button" id="_unique_name_button" value="Add Image">
+						</div>
 					<div id="add-deezer_widget-popup-options">
 						<div>
 							<div>
