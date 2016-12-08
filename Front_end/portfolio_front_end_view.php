@@ -4118,7 +4118,7 @@ jQuery(function(){
 /***</add>***/
 .portelement_<?php echo $portfolioID; ?> {
 	position: relative;
-	width: calc(100% - <?php echo $paramssld['ht_view3_element_border_width']; ?>px);  
+	width: calc(95% - <?php echo $paramssld['ht_view3_element_border_width']; ?>px);  
 	margin:5px 0px 5px 0px;
 	padding:2%;
 	clear:both;
